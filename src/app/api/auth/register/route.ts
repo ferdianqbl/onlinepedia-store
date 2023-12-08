@@ -9,12 +9,12 @@ export async function POST(req: NextRequest) {
     if (!res.status) throw new Error(res.message);
 
     return NextResponse.json(
-      { status: 0, message: res.message },
+      { status: 1, message: res.message },
       { status: 200 }
     );
   } catch (error: any) {
     return NextResponse.json(
-      { status: 1, message: error.message },
+      { status: 0, message: error.message },
       { status: 400 }
     );
   }
