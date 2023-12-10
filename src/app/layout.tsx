@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import "@mantine/core/styles.css";
 import { MantineProvider, createTheme } from "@mantine/core";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -18,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-900`}>
+      <body className={`${inter.className}`}>
         <MantineProvider>{children}</MantineProvider>
       </body>
     </html>

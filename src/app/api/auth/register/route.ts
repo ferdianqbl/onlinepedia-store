@@ -13,9 +13,15 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    return NextResponse.json(
-      { status: 0, message: error.message },
-      { status: 400 }
-    );
+    if (error instanceof Error)
+      return NextResponse.json(
+        { status: 0, message: error.message },
+        { status: 500 }
+      );
+    else
+      return NextResponse.json(
+        { status: 0, message: error.message },
+        { status: 400 }
+      );
   }
 }

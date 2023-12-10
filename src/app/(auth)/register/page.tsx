@@ -58,15 +58,13 @@ const Page = () => {
       setLoading(false);
       return setError(data.message);
     }
-    push("/auth/login");
+    push("/login");
     setLoading(false);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-white text-center font-bold mb-8 text-4xl">
-        Register
-      </h1>
+      <h1 className=" text-center font-bold mb-8 text-4xl">Register</h1>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
         className="w-64 flex flex-col gap-4"
@@ -113,9 +111,9 @@ const Page = () => {
           Register
         </Button>
       </form>
-      <p className="text-white">
+      <p className="">
         Already have an account?{" "}
-        <Link href="/auth/login" className="text-blue-500">
+        <Link href="/login" className="text-blue-500">
           Login
         </Link>
       </p>

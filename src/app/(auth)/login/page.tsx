@@ -5,6 +5,7 @@ import { Button } from "@mantine/core";
 import Input from "@/components/atom/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { signIn, useSession } from "next-auth/react";
 
 const Page = () => {
   const { push } = useRouter();
@@ -25,25 +26,25 @@ const Page = () => {
   });
 
   const handleSubmit = async (values: { email: string; password: string }) => {
-    // setLoading(true);
-    // setError("");
-    // const res = await fetch("/api/auth/register", {
-    //   method: "POST",
-    //   body: JSON.stringify(values),
-    // });
-    // const data = await res.json();
-    // console.log(data);
-    // if (!data.status) {
-    //   setLoading(false);
-    //   return setError(data.message);
-    // }
-    // push("/auth/login");
-    // setLoading(false);
+    try {
+      setLoading(true);
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: values.email,
+        password: values.password,
+        callbackUrl: "/",
+      });
+      setLoading(false);
+      if (!res?.error) push("/");
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-white text-center font-bold mb-8 text-4xl">Login</h1>
+      <h1 className=" text-center font-bold mb-8 text-4xl">Login</h1>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
         className="w-64 flex flex-col gap-4"
@@ -70,9 +71,9 @@ const Page = () => {
           Login
         </Button>
       </form>
-      <p className="text-white">
+      <p className="">
         {"Don't"} have an account?{" "}
-        <Link href="/auth/register" className="text-blue-500">
+        <Link href="/register" className="text-blue-500">
           Register
         </Link>
       </p>
