@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  getDoc,
   getDocs,
   getFirestore,
   query,
@@ -37,3 +38,15 @@ export async function signUp(data: {
     return { status: false, message: "Error creating user" };
   }
 }
+
+// export async function signIn(data: { email: string, password: string }) {
+//   try {
+//     const q = query(collection(db, "users"), where("email", "==", data.email));
+//     const user = await getDoc(q);
+
+//     if (!user.exists) throw new Error("Login Failed");
+//     const match = await bcrypt.compare(data.password, user.data().password);
+//   } catch (error) {
+
+//   }
+// }
