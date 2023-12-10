@@ -1,11 +1,10 @@
-import { authOptions } from "@/lib/next-auth/auth";
-import { getServerSession } from "next-auth";
+import Navbar from "@/components/molecules/navbar";
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
   return (
     <div className="">
-      <pre>{JSON.stringify(session)}</pre>
+      <Navbar />
+      Home
     </div>
   );
 }

@@ -53,7 +53,6 @@ const Page = () => {
     });
 
     const data = await res.json();
-    console.log(data);
     if (!data.status) {
       setLoading(false);
       return setError(data.message);

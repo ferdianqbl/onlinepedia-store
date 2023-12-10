@@ -5,7 +5,7 @@ import { Button } from "@mantine/core";
 import Input from "@/components/atom/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 const Page = () => {
   const { push } = useRouter();
@@ -28,6 +28,7 @@ const Page = () => {
   const handleSubmit = async (values: { email: string; password: string }) => {
     try {
       setLoading(true);
+      setError("");
       const res = await signIn("credentials", {
         redirect: false,
         email: values.email,
@@ -35,10 +36,10 @@ const Page = () => {
         callbackUrl: "/",
       });
       setLoading(false);
-      if (!res?.error) push("/");
-    } catch (error) {
+      if (res?.error) throw new Error("Login failed");
+    } catch (error: any) {
       setLoading(false);
-      console.log(error);
+      setError(error.message);
     }
   };
 
