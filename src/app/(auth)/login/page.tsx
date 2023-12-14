@@ -37,6 +37,7 @@ const Page = () => {
       });
       setLoading(false);
       if (res?.error) throw new Error("Login failed");
+      else push("/");
     } catch (error: any) {
       setLoading(false);
       setError(error.message);
@@ -68,7 +69,12 @@ const Page = () => {
             {...form.getInputProps("password")}
           />
         </div>
-        <Button disabled={loading} type="submit" variant="filled" fullWidth>
+        <Button
+          className="!bg-black"
+          disabled={loading}
+          type="submit"
+          variant="filled"
+        >
           Login
         </Button>
       </form>

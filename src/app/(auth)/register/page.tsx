@@ -106,7 +106,13 @@ const Page = () => {
             {...form.getInputProps("confirmPassword")}
           />
         </div>
-        <Button disabled={loading} type="submit" variant="filled" fullWidth>
+        <Button
+          disabled={loading}
+          type="submit"
+          variant="filled"
+          className="!bg-black"
+          fullWidth
+        >
           Register
         </Button>
       </form>
