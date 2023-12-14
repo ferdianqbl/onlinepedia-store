@@ -1,6 +1,7 @@
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { signIn } from "../firebase/auth";
+import GoogleProvider from "next-auth/providers/google";
+import { signIn, signInWithGoogle } from "../firebase/auth";
 
 export const authOptions: AuthOptions = {
   session: {
@@ -24,6 +25,10 @@ export const authOptions: AuthOptions = {
         return res.user;
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account, profile }: any) {
@@ -33,6 +38,17 @@ export const authOptions: AuthOptions = {
         token.phone = user.phone;
         token.role = user.role;
         token.name = user.name;
+      }
+      if (account?.provider === "google") {
+        const data = {
+          ...user,
+          type: "google",
+        };
+        const res: any = await signInWithGoogle(data);
+        if (!res.status) return null;
+        token.email = res.user?.email;
+        token.name = res.user?.name;
+        token.role = res.user?.role;
       }
       return token;
     },

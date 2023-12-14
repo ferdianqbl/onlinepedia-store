@@ -68,3 +68,26 @@ export async function signIn(data: { email: string; password: string }) {
     return { status: false, message: "Login Failed" };
   }
 }
+
+export async function signInWithGoogle(data: any) {
+  try {
+    const q = query(collection(db, "users"), where("email", "==", data.email));
+    const querySnapshot = await getDocs(q);
+    const users = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    if (users.length <= 0) {
+      const newUser = {
+        name: data.name,
+        email: data.email,
+        // phone: data.phone,
+        role: "member",
+      };
+      await addDoc(collection(db, "users"), newUser);
+      return { status: true, message: "Login successful", user: newUser };
+    } else return { status: true, message: "Login successful", user: users[0] };
+  } catch (error) {
+    return { status: false, message: "Login Failed", user: null };
+  }
+}

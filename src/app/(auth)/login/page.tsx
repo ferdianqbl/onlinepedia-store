@@ -46,7 +46,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className=" text-center font-bold mb-8 text-4xl">Login</h1>
+      <h1 className="text-center font-bold mb-8 text-4xl">Login</h1>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
         className="w-64 flex flex-col gap-4"
@@ -78,6 +78,18 @@ const Page = () => {
           Login
         </Button>
       </form>
+      <p className="mt-4 mb-2">
+        Login with{" "}
+        <button
+          type="button"
+          onClick={() => {
+            signIn("google", { callbackUrl: "/", redirect: false });
+          }}
+          className="text-blue-500"
+        >
+          Google
+        </button>
+      </p>
       <p className="">
         {"Don't"} have an account?{" "}
         <Link href="/register" className="text-blue-500">
