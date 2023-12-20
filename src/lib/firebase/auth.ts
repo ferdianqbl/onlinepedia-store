@@ -10,24 +10,23 @@ import {
 } from "firebase/firestore";
 import app from "./init";
 import bcrypt from "bcrypt";
+import { getDataByField } from "./queries";
 
 const db = getFirestore(app);
 
-export async function signUp(data: {
+type UserType = {
   name: string;
   email: string;
-  password: string;
-  confirmPassword: string;
-  phone: string;
-  role?: string;
-}) {
+  password: string | null;
+  phone: string | null;
+  role: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export async function signUp(data: UserType & { confirmPassword: string }) {
   try {
-    const q = query(collection(db, "users"), where("email", "==", data.email));
-    const querySnapshot = await getDocs(q);
-    const users = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const users = await getDataByField("users", "email", data.email);
     if (users.length > 0)
       return { status: false, message: "Email already exists" };
     if (data.password !== data.confirmPassword)
@@ -36,12 +35,14 @@ export async function signUp(data: {
     if (!data.role) data.role = "member";
     data.password = await bcrypt.hash(data.password, 10);
 
-    const newUser = {
+    const newUser: UserType = {
       name: data.name,
       email: data.email,
       password: data.password,
       phone: data.phone,
       role: data.role,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     await addDoc(collection(db, "users"), newUser);
@@ -53,12 +54,7 @@ export async function signUp(data: {
 
 export async function signIn(data: { email: string; password: string }) {
   try {
-    const q = query(collection(db, "users"), where("email", "==", data.email));
-    const querySnapshot = await getDocs(q);
-    const users = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const users = await getDataByField("users", "email", data.email);
     if (users.length <= 0) return { status: false, message: "Login Failed" };
     const user: any = users[0];
     const match = await bcrypt.compare(data.password, user.password);
@@ -71,18 +67,14 @@ export async function signIn(data: { email: string; password: string }) {
 
 export async function signInWithGoogle(data: any) {
   try {
-    const q = query(collection(db, "users"), where("email", "==", data.email));
-    const querySnapshot = await getDocs(q);
-    const users = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const users = await getDataByField("users", "email", data.email);
     if (users.length <= 0) {
-      const newUser = {
+      const newUser: UserType = {
         name: data.name,
         email: data.email,
-        // phone: data.phone,
         role: "member",
+        password: null,
+        phone: null,
       };
       await addDoc(collection(db, "users"), newUser);
       return { status: true, message: "Login successful", user: newUser };
