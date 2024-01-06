@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "@mantine/core/styles.css";
-import { MantineProvider, createTheme } from "@mantine/core";
 import Provider from "@/lib/context/client-provider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/next-auth/auth";
@@ -23,9 +21,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}`}>
-        <Provider session={session}>
-          <MantineProvider>{children}</MantineProvider>
-        </Provider>
+        <Provider session={session}>{children}</Provider>
       </body>
     </html>
   );
