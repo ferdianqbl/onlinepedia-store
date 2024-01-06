@@ -4,29 +4,22 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const Page = () => {
   const { push } = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const {
     register,
     reset,
     formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  } = useForm();
 
-  const onSubmit = async (values: { email: string; password: string }) => {
+  const onSubmit = async (values: FieldValues) => {
     try {
-      setLoading(true);
       setError("");
       const res = await signIn("credentials", {
         redirect: false,
@@ -34,12 +27,11 @@ const Page = () => {
         password: values.password,
         callbackUrl: "/",
       });
-      setLoading(false);
       if (res?.error) throw new Error("Login failed");
-      else push("/");
+      push("/");
     } catch (error: any) {
-      setLoading(false);
       setError(error.message);
+      reset();
     }
   };
 
@@ -52,21 +44,39 @@ const Page = () => {
       >
         <p className="text-red-500 text-center font-bold text-md">{error}</p>
         <div className="flex flex-col gap-2">
-          <Input
-            placeholder="Enter your email"
-            type="email"
-            required
-            name="email"
-          />
+          <div className="space-y-1">
+            <Input
+              placeholder="Enter your email"
+              type="email"
+              required
+              {...register("email", {
+                required: "This field is required",
+              })}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">
+                {errors.email.message as any}
+              </p>
+            )}
+          </div>
 
-          <Input
-            placeholder="Enter your password"
-            type="password"
-            required
-            name="password"
-          />
+          <div className="space-y-1">
+            <Input
+              placeholder="Enter your password"
+              type="password"
+              required
+              {...register("password", {
+                required: "This field is required",
+              })}
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm">
+                {errors.password.message as any}
+              </p>
+            )}
+          </div>
         </div>
-        <Button disabled={loading} type="submit" className="w-full">
+        <Button disabled={isSubmitting} type="submit" className="w-full">
           Login
         </Button>
       </form>
