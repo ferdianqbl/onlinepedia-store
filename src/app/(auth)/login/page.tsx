@@ -1,31 +1,30 @@
 "use client";
 import { useState } from "react";
-import { useForm } from "@mantine/form";
-import { Button } from "@mantine/core";
-import Input from "@/components/atom/input";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Page = () => {
   const { push } = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const form = useForm({
-    initialValues: {
+  const {
+    register,
+    reset,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
       email: "",
       password: "",
     },
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) => {
-        if (value.length < 8)
-          return "Password must be at least 8 characters long";
-      },
-    },
   });
 
-  const handleSubmit = async (values: { email: string; password: string }) => {
+  const onSubmit = async (values: { email: string; password: string }) => {
     try {
       setLoading(true);
       setError("");
@@ -48,7 +47,7 @@ const Page = () => {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-center font-bold mb-8 text-4xl">Login</h1>
       <form
-        onSubmit={form.onSubmit(handleSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className="w-64 flex flex-col gap-4"
       >
         <p className="text-red-500 text-center font-bold text-md">{error}</p>
@@ -58,7 +57,6 @@ const Page = () => {
             type="email"
             required
             name="email"
-            {...form.getInputProps("email")}
           />
 
           <Input
@@ -66,15 +64,9 @@ const Page = () => {
             type="password"
             required
             name="password"
-            {...form.getInputProps("password")}
           />
         </div>
-        <Button
-          className="!bg-black"
-          disabled={loading}
-          type="submit"
-          variant="filled"
-        >
+        <Button disabled={loading} type="submit" className="w-full">
           Login
         </Button>
       </form>

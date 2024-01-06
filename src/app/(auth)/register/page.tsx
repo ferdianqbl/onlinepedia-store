@@ -1,44 +1,31 @@
 "use client";
 import { useState } from "react";
-import { useForm } from "@mantine/form";
-import { Button } from "@mantine/core";
-import Input from "@/components/atom/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const Page = () => {
   const { push } = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const form = useForm({
-    initialValues: {
+  const {
+    register,
+    reset,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+  } = useForm({
+    defaultValues: {
       name: "",
       email: "",
       phone: "",
       password: "",
       confirmPassword: "",
     },
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) => {
-        if (value.length < 8)
-          return "Password must be at least 8 characters long";
-      },
-      confirmPassword: (value, values) => {
-        if (value !== values.password) {
-          return "Passwords do not match";
-        }
-      },
-      name: (value) => {
-        if (!value) return "Name must be at least 3 characters long";
-      },
-      phone: (value, values) => {
-        if (value && !/^\d+$/.test(value)) return "Invalid phone number";
-      },
-    },
   });
 
-  const handleSubmit = async (values: {
+  const onSubmit = async (values: {
     name: string;
     email: string;
     phone: string;
@@ -65,7 +52,7 @@ const Page = () => {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className=" text-center font-bold mb-8 text-4xl">Register</h1>
       <form
-        onSubmit={form.onSubmit(handleSubmit)}
+        onSubmit={handleSubmit(onSubmit)}
         className="w-64 flex flex-col gap-4"
       >
         <p className="text-red-500 text-center font-bold text-md">{error}</p>
@@ -75,44 +62,33 @@ const Page = () => {
             type="text"
             required
             name="name"
-            {...form.getInputProps("name")}
           />
           <Input
             placeholder="Enter your email"
             type="email"
             required
             name="email"
-            {...form.getInputProps("email")}
           />
           <Input
             placeholder="Enter your phone"
             type="tel"
             required
             name="phone"
-            {...form.getInputProps("phone")}
           />
           <Input
             placeholder="Enter your password"
             type="password"
             required
             name="password"
-            {...form.getInputProps("password")}
           />
           <Input
             placeholder="Enter your password"
             type="password"
             required
             name="confirmPassword"
-            {...form.getInputProps("confirmPassword")}
           />
         </div>
-        <Button
-          disabled={loading}
-          type="submit"
-          variant="filled"
-          className="!bg-black"
-          fullWidth
-        >
+        <Button disabled={loading} type="submit" className="w-full">
           Register
         </Button>
       </form>
