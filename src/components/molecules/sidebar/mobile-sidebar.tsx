@@ -23,15 +23,15 @@ export const MobileSidebar = () => {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <div className="flex items-center justify-center gap-2">
-            <MenuIcon className="h-5 w-5 text-primary-400" />
+            <MenuIcon className="h-5 w-5 text-secondary" />
           </div>
         </SheetTrigger>
-        <SheetContent side="left" className="xsm:max-w-[18rem] w-full">
+        <SheetContent side="left" className="bg-primary w-full text-secondary">
           <div className="py-4 flex flex-col justify-between h-screen">
             <SideNav items={NavItems} setOpen={setOpen} />
             <Button
               variant="ghost"
-              className="w-full justify-start mb-10 ring-offset-0 rounded-full hover:bg-primary-100 duration-200 text-primary-500 hover:text-primary-500 text-base flex gap-3"
+              className="w-full h-12 justify-start mb-10 ring-offset-0 rounded-full duration-200 text-base flex gap-3"
             >
               <LogOut className="h-5 w-5" /> Keluar
             </Button>
