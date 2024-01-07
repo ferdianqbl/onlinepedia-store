@@ -75,6 +75,8 @@ export async function signInWithGoogle(data: any) {
         role: "member",
         password: null,
         phone: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       await addDoc(collection(db, "users"), newUser);
       return { status: true, message: "Login successful", user: newUser };
