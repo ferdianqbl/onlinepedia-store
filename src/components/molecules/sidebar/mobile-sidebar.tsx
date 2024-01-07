@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SideNav } from "./side-nav";
 import { NavItems } from "@/lib/constants/side-nav";
 import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 
 export const MobileSidebar = () => {
   const [open, setOpen] = useState(false);
@@ -30,10 +31,11 @@ export const MobileSidebar = () => {
           <div className="py-4 flex flex-col justify-between h-screen">
             <SideNav items={NavItems} setOpen={setOpen} />
             <Button
+              onClick={() => signOut()}
               variant="ghost"
               className="w-full h-12 justify-start mb-10 ring-offset-0 rounded-full duration-200 text-base flex gap-3"
             >
-              <LogOut className="h-5 w-5" /> Keluar
+              <LogOut className="h-5 w-5" /> Logout
             </Button>
           </div>
         </SheetContent>

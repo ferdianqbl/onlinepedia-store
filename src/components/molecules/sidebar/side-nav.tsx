@@ -15,6 +15,7 @@ import {
   AccordionTrigger,
 } from "./subnav-accordion";
 import { ChevronDown } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 interface SideNavProps {
   items: NavItem[];
@@ -107,6 +108,7 @@ export function SideNav({ items, setOpen, className }: SideNavProps) {
             key={item.title}
             onClick={() => {
               if (setOpen) setOpen(false);
+              item.title === "Logout" && signOut();
             }}
             variant={"ghost"}
             className={cn(

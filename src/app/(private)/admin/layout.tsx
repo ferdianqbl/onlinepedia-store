@@ -1,7 +1,18 @@
 import Sidebar from "@/components/molecules/sidebar";
 import Header from "@/components/molecules/sidebar/header";
+import { authOptions } from "@/lib/next-auth/auth";
+import { DefaultSession, Session, getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+type SessionType = {
+  user: {
+    role?: string;
+  } & DefaultSession;
+} & Session;
+
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const session: SessionType | null = await getServerSession(authOptions);
+  if (!session || session?.user.role !== "admin") redirect("/");
   return (
     <>
       <Header />

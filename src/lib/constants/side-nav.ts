@@ -18,7 +18,7 @@ export const NavItems: NavItem[] = [
   },
   {
     type: "button",
-    title: "Keluar",
+    title: "Logout",
     icon: LogOut,
     href: "",
     color: "",
