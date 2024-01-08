@@ -15,7 +15,7 @@ export async function callAPI({
   return axios({
     method,
     url,
-    data: body,
+    data: body ? body : undefined,
     headers: {
       Authorization: token ? `Bearer ${token}` : undefined,
     },

@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import app from "./init";
 import bcrypt from "bcrypt";
-import { getDataByField } from "./queries";
+import { getDataByField } from "./services";
 
 const db = getFirestore(app);
 
