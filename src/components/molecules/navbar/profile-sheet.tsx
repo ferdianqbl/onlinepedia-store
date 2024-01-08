@@ -3,7 +3,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Lock, Menu } from "lucide-react";
-import { DefaultSession, Session } from "next-auth";
+import { DefaultSession } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
