@@ -1,24 +1,14 @@
-"use client";
-import Link from "next/link";
-import ButtonLogout from "./button-logout";
-import { useSession } from "next-auth/react";
+import ProfileSheet from "./profile-sheet";
 
 const Navbar = () => {
-  const { status } = useSession();
   return (
-    <div className="bg-black absolute top-0 right-0 left-0">
+    <div className="bg-primary absolute top-0 right-0 left-0">
       <nav className="container px-4 sm:px-0 mx-auto py-4 flex items-center justify-between">
         <ul className="flex items-center gap-8 text-white">
           <li className="">Home</li>
           <li className="">About</li>
         </ul>
-        {status === "authenticated" ? (
-          <ButtonLogout />
-        ) : (
-          <Link href={"/login"} className="text-white">
-            Login
-          </Link>
-        )}
+        <ProfileSheet />
       </nav>
     </div>
   );
