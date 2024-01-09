@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -51,4 +52,9 @@ export async function updateData({
   const res = doc(db, collectionName, id);
   const updated = await updateDoc(res, data);
   return updated;
+}
+
+export async function deleteData(collectionName: string, id: string) {
+  const res = doc(db, collectionName, id);
+  await deleteDoc(res);
 }
