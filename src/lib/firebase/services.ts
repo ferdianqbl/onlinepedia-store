@@ -5,6 +5,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import app from "./init";
@@ -37,3 +38,17 @@ export const getDataByField = async (
 
   return res;
 };
+
+export async function updateData({
+  collectionName,
+  id,
+  data,
+}: {
+  collectionName: string;
+  id: string;
+  data: any;
+}) {
+  const res = doc(db, collectionName, id);
+  const updated = await updateDoc(res, data);
+  return updated;
+}
