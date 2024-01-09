@@ -11,6 +11,7 @@ import {
 import { deleteUser, getAllUsers } from "@/services/users";
 import { Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import EditUser from "./edit-user";
 
 type UserType = {
   id: string;
@@ -30,7 +31,7 @@ type UserType = {
 
 const TableUsers = () => {
   const [users, setUsers] = useState<UserType[] | []>([]);
-
+  const [trigger, setTrigger] = useState<boolean>(false);
   const getAllData = async () => {
     const res = await getAllUsers();
     setUsers(res.data);
@@ -71,12 +72,7 @@ const TableUsers = () => {
             <TableCell className="">{user.createdAt.seconds}</TableCell>
             <TableCell className="">{user.updatedAt.seconds}</TableCell>
             <TableCell className="flex items-center gap-1">
-              <Button
-                variant={"outline"}
-                className="p-1 text-blue-600 hover:text-blue-600/80 w-6 h-6"
-              >
-                <Edit className="w-4 h-4" />
-              </Button>
+              <EditUser data={user} setTrigger={() => setTrigger(!trigger)} />
               <Button
                 variant={"outline"}
                 className="p-1 text-red-600 hover:text-red-600/80 w-6 h-6"
