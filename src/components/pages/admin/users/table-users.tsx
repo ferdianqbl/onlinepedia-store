@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllUsers } from "@/services/users";
+import { deleteUser, getAllUsers } from "@/services/users";
 import { Edit, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -34,6 +34,14 @@ const TableUsers = () => {
   const getAllData = async () => {
     const res = await getAllUsers();
     setUsers(res.data);
+  };
+
+  const deleteHandler = async (id: string) => {
+    const res = await deleteUser(id);
+    if (res.error) {
+      alert(res.message);
+    }
+    getAllData();
   };
 
   useEffect(() => {
@@ -72,6 +80,7 @@ const TableUsers = () => {
               <Button
                 variant={"outline"}
                 className="p-1 text-red-600 hover:text-red-600/80 w-6 h-6"
+                onClick={() => deleteHandler(user.id)}
               >
                 <Trash className="w-4 h-4" />
               </Button>
