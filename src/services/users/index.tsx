@@ -17,3 +17,21 @@ export async function deleteUser(id: string) {
     data: res.data.data,
   };
 }
+
+export async function updateUser(id: string, data: any) {
+  const res = await callAPI({
+    method: "PUT",
+    url: `/api/users`,
+    body: {
+      id,
+      data: {
+        ...data,
+      },
+    },
+  });
+  return {
+    error: res.error,
+    message: res.message,
+    data: res.data.data,
+  };
+}

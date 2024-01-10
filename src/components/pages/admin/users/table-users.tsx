@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { deleteUser, getAllUsers } from "@/services/users";
-import { Edit, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import EditUser from "./edit-user";
 
@@ -47,7 +47,7 @@ const TableUsers = () => {
 
   useEffect(() => {
     getAllData();
-  }, []);
+  }, [trigger]);
 
   return (
     <Table className="border mt-8">

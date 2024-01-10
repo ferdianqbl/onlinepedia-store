@@ -21,11 +21,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Edit } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
+import { updateUser } from "@/services/users";
 
 type Props = {
   data: any;
-  setTrigger: (value: boolean) => void;
+  setTrigger: () => void;
 };
 
 const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
@@ -45,6 +46,20 @@ const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
     },
   });
 
+  const onSubmit = async (values: FieldValues) => {
+    setError("");
+    const res = await updateUser(data.id, {
+      ...values,
+      role,
+    });
+    if (res.error) {
+      console.log(res.message);
+      setError(res.message);
+    } else setTrigger();
+
+    reset();
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -62,7 +77,14 @@ const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
             Make changes to your profile here. Click save when youre done.
           </DialogDescription>
         </DialogHeader>
-        <form action="" className="w-ful flex flex-col gap-4">
+        <form
+          action=""
+          className="w-ful flex flex-col gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          {/* {
+            <p className="text-red-600 text-sm">{error && error}</p>
+          } */}
           <div className="flex flex-col gap-2 w-fu">
             <Input
               id="name"
@@ -103,7 +125,9 @@ const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
               </SelectContent>
             </Select>
           </div>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            Save changes
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

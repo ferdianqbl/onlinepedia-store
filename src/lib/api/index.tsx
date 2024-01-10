@@ -8,7 +8,7 @@ export async function callAPI({
 }: {
   method: "GET" | "POST" | "PUT" | "DELETE";
   url: string;
-  body?: FormData | string;
+  body?: FormData | string | any;
   token?: string;
 }) {
   try {
