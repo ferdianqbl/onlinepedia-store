@@ -20,6 +20,7 @@ type UserType = {
   password: string | null;
   phone: string | null;
   role: string;
+  image?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -67,9 +68,10 @@ export async function signIn(data: { email: string; password: string }) {
 
 export async function signInWithGoogle(data: any) {
   try {
-    const users = await getDataByField("users", "email", data.email);
+    let users = await getDataByField("users", "email", data.email);
     if (users.length <= 0) {
       const newUser: UserType = {
+        image: data.image,
         name: data.name,
         email: data.email,
         role: "member",
@@ -79,8 +81,9 @@ export async function signInWithGoogle(data: any) {
         updatedAt: new Date(),
       };
       await addDoc(collection(db, "users"), newUser);
-      return { status: true, message: "Login successful", user: newUser };
-    } else return { status: true, message: "Login successful", user: users[0] };
+    }
+    users = await getDataByField("users", "email", data.email);
+    return { status: true, message: "Login successful", user: users[0] };
   } catch (error) {
     return { status: false, message: "Login Failed", user: null };
   }

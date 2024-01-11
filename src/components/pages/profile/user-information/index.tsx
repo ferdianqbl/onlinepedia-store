@@ -12,6 +12,7 @@ const UserInformation = () => {
     name: "",
     email: "",
     phone: "",
+    image: "",
   });
   const getData = async () => {
     const res = await getUser(
@@ -31,12 +32,24 @@ const UserInformation = () => {
     <form action="">
       <div className="flex gap-3 w-full">
         <div className="">
-          <Image
-            src="https://source.unsplash.com/random/300x300?person"
-            width={200}
-            height={200}
-            className="rounded-full"
-            alt="user profile picture"
+          <label htmlFor="avatar">
+            <Image
+              src={
+                user.image ??
+                "https://source.unsplash.com/random/300x300?person"
+              }
+              width={200}
+              height={200}
+              className="rounded-full"
+              alt="user profile picture"
+            />
+          </label>
+          <input
+            type="file"
+            name="avatar"
+            id="avatar"
+            className="hidden"
+            accept="image/*"
           />
         </div>
         <div className="w-full border p-4 rounded-md flex flex-col gap-3">
