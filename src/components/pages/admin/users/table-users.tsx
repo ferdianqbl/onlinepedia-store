@@ -41,7 +41,8 @@ const TableUsers = () => {
   };
 
   const deleteHandler = async (id: string) => {
-    const res = await deleteUser(id);
+    const token = session?.data?.accessToken;
+    const res = await deleteUser(id, token);
     if (res.error) {
       alert(res.message);
     }

@@ -23,6 +23,7 @@ import { Edit } from "lucide-react";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { updateUser } from "@/services/users";
+import { useSession } from "next-auth/react";
 
 type Props = {
   data: any;
@@ -30,6 +31,7 @@ type Props = {
 };
 
 const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
+  const session: any = useSession();
   const [error, setError] = useState<string>("");
   const [role, setRole] = useState<string>(data.role);
   const {
@@ -47,11 +49,16 @@ const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
   });
 
   const onSubmit = async (values: FieldValues) => {
+    const token = session?.data?.accessToken;
     setError("");
-    const res = await updateUser(data.id, {
-      ...values,
-      role,
-    });
+    const res = await updateUser(
+      data.id,
+      {
+        ...values,
+        role,
+      },
+      token
+    );
     if (res.error) {
       console.log(res.message);
       setError(res.message);
@@ -102,13 +109,7 @@ const EditUser: React.FC<Props> = ({ data, setTrigger }) => {
                 required: "This field is required",
               })}
             />
-            <Input
-              disabled
-              id="phone"
-              {...register("phone", {
-                required: "This field is required",
-              })}
-            />
+            <Input disabled id="phone" {...register("phone")} />
             <Select
               {...register("role")}
               onValueChange={(value) => setRole(value)}

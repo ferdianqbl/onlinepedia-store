@@ -1,10 +1,12 @@
 import { deleteData } from "@/lib/firebase/services";
+import { tokenVerify } from "@/lib/server";
 import { NextRequest, NextResponse } from "next/server";
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    tokenVerify();
     const { id } = params;
     await deleteData("users", id);
     return NextResponse.json(

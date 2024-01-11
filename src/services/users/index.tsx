@@ -2,7 +2,6 @@ import { callAPI } from "@/lib/api";
 
 export async function getAllUsers(token: string) {
   const res = await callAPI({ method: "GET", url: "/api/users", token });
-  console.log("res getAllUsers", res);
   return {
     error: res.error,
     message: res.message,
@@ -10,8 +9,12 @@ export async function getAllUsers(token: string) {
   };
 }
 
-export async function deleteUser(id: string) {
-  const res = await callAPI({ method: "DELETE", url: `/api/users/${id}` });
+export async function deleteUser(id: string, token: string) {
+  const res = await callAPI({
+    method: "DELETE",
+    url: `/api/users/${id}`,
+    token,
+  });
   return {
     error: res.error,
     message: res.message,
@@ -19,10 +22,11 @@ export async function deleteUser(id: string) {
   };
 }
 
-export async function updateUser(id: string, data: any) {
+export async function updateUser(id: string, data: any, token: string) {
   const res = await callAPI({
     method: "PUT",
     url: `/api/users`,
+    token,
     body: {
       id,
       data: {
