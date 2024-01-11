@@ -2,7 +2,7 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Lock, Menu } from "lucide-react";
+import { Lock, Menu, User } from "lucide-react";
 import { DefaultSession } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -27,6 +27,13 @@ const AuthComponents = () => {
             <span className="w-full h-full">Admin</span>
           </Link>
         )}
+        <Link
+          href={"/profile"}
+          className="flex gap-2 items-end text-slate-400 hover:text-slate-500 transition-all duration-300"
+        >
+          <User className="w-4 h-full" />
+          <span className="w-full h-full">Profile</span>
+        </Link>
       </div>
       <Button
         className="w-full text-primary bg-secondary hover:bg-secondary/80 transition-all duration-300"
