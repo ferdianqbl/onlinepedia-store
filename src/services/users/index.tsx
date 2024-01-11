@@ -1,7 +1,8 @@
 import { callAPI } from "@/lib/api";
 
-export async function getAllUsers() {
-  const res = await callAPI({ method: "GET", url: "/api/users" });
+export async function getAllUsers(token: string) {
+  const res = await callAPI({ method: "GET", url: "/api/users", token });
+  console.log("res getAllUsers", res);
   return {
     error: res.error,
     message: res.message,

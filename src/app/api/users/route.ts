@@ -1,8 +1,10 @@
 import { getData, updateData } from "@/lib/firebase/services";
 import { NextRequest, NextResponse } from "next/server";
+import { tokenVerify } from "@/lib/server";
 
 export async function GET(req: NextRequest) {
   try {
+    tokenVerify();
     const res = await getData("users");
     const data = res.map((user: any) => {
       delete user.password;
@@ -25,6 +27,7 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
+    tokenVerify();
     const { id, data } = await req.json();
     const res = await updateData({ collectionName: "users", id, data });
     return NextResponse.json({ status: 1, data: res }, { status: 200 });

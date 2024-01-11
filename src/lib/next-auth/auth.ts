@@ -2,6 +2,7 @@ import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { signIn, signInWithGoogle } from "../firebase/auth";
+import jwt from "jsonwebtoken";
 
 export const authOptions: AuthOptions = {
   session: {
@@ -59,6 +60,12 @@ export const authOptions: AuthOptions = {
       session.user.role = token.role;
       session.user.name = token.name;
       session.user.exp = token.exp;
+
+      const accessToken = jwt.sign(token, process.env.NEXTAUTH_SECRET || "", {
+        algorithm: "HS256",
+      });
+      session.accessToken = accessToken;
+
       return session;
     },
   },

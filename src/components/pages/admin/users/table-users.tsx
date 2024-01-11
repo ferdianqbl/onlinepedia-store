@@ -11,6 +11,7 @@ import {
 import { deleteUser, getAllUsers } from "@/services/users";
 import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import EditUser from "./edit-user";
 
 type UserType = {
@@ -30,10 +31,12 @@ type UserType = {
 };
 
 const TableUsers = () => {
+  const session: any = useSession();
   const [users, setUsers] = useState<UserType[] | []>([]);
   const [trigger, setTrigger] = useState<boolean>(false);
   const getAllData = async () => {
-    const res = await getAllUsers();
+    const token = session?.data?.accessToken;
+    const res = await getAllUsers(token);
     setUsers(res.data);
   };
 
