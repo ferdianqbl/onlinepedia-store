@@ -47,6 +47,7 @@ export const authOptions: AuthOptions = {
         };
         const res: any = await signInWithGoogle(data);
         if (!res.status) return null;
+        token.id = res.user?.id;
         token.email = res.user?.email;
         token.name = res.user?.name;
         token.role = res.user?.role;

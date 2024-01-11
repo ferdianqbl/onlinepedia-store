@@ -3,10 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
+import { getUser } from "@/services/users";
+import { useEffect, useState } from "react";
 
 const UserInformation = () => {
-  const { data } = useSession();
-  console.log(data);
+  const session: any = useSession();
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const getData = async () => {
+    const res = await getUser(
+      session?.data?.user?.id,
+      session?.data?.accessToken
+    );
+    if (!res.error) {
+      setUser(res.data);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <form action="">
       <div className="flex gap-3 w-full">
@@ -21,13 +41,23 @@ const UserInformation = () => {
         </div>
         <div className="w-full border p-4 rounded-md flex flex-col gap-3">
           <div className="flex flex-col w-full">
-            <Input placeholder="Name" id="name" type="text" />
+            <Input placeholder="Name" id="name" type="text" value={user.name} />
           </div>
           <div className="flex flex-col w-full">
-            <Input placeholder="Email" id="email" type="email" />
+            <Input
+              placeholder="Email"
+              id="email"
+              type="email"
+              value={user.email}
+            />
           </div>
           <div className="flex flex-col w-full">
-            <Input placeholder="Phone" id="phone" type="tel" />
+            <Input
+              placeholder="Phone"
+              id="phone"
+              type="tel"
+              value={user.phone}
+            />
           </div>
           <Button className="w-fit" type="submit" size={"sm"}>
             Update

@@ -9,6 +9,15 @@ export async function getAllUsers(token: string) {
   };
 }
 
+export async function getUser(id: string, token: string) {
+  const res = await callAPI({ method: "GET", url: `/api/users/${id}`, token });
+  return {
+    error: res.error,
+    message: res.message,
+    data: res.data.data,
+  };
+}
+
 export async function deleteUser(id: string, token: string) {
   const res = await callAPI({
     method: "DELETE",
