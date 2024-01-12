@@ -9,9 +9,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { getStorage, ref } from "firebase/storage";
 import app from "./init";
 
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 export async function getData(collectionName: string) {
   const snapshot = await getDocs(collection(db, collectionName));
@@ -57,4 +59,9 @@ export async function updateData({
 export async function deleteData(collectionName: string, id: string) {
   const res = doc(db, collectionName, id);
   await deleteDoc(res);
+}
+
+export async function uploadImage(userId: string, filename: string) {
+  const storageRef = ref(storage, `images/${userId}/${filename}`);
+  // const uploadTask = await
 }
