@@ -24,23 +24,3 @@ export async function GET(req: NextRequest) {
       );
   }
 }
-
-export async function PUT(req: NextRequest) {
-  try {
-    tokenVerify();
-    const { id, data } = await req.json();
-    const res = await updateData({ collectionName: "users", id, data });
-    return NextResponse.json({ status: 1, data: res }, { status: 200 });
-  } catch (error: any) {
-    if (error instanceof Error)
-      return NextResponse.json(
-        { status: 0, message: error.message },
-        { status: 500 }
-      );
-    else
-      return NextResponse.json(
-        { status: 0, message: error.message },
-        { status: 400 }
-      );
-  }
-}

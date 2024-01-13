@@ -34,13 +34,10 @@ export async function deleteUser(id: string, token: string) {
 export async function updateUser(id: string, data: any, token: string) {
   const res = await callAPI({
     method: "PUT",
-    url: `/api/users`,
+    url: `/api/users/${id}`,
     token,
     body: {
-      id,
-      data: {
-        ...data,
-      },
+      data,
     },
   });
   return {
