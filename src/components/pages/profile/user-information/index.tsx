@@ -3,12 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { getUser } from "@/services/users";
+import { getUser, updateUser } from "@/services/users";
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { uploadImage } from "@/lib/firebase/services";
 
 const UserInformation = () => {
   const [error, setError] = useState<string>("");
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    phone: "",
+    image: "",
+  });
   const session: any = useSession();
   const [image, setImage] = useState<File | null>(null);
   const {
@@ -29,6 +37,7 @@ const UserInformation = () => {
       session?.data?.accessToken
     );
     if (!res.error) {
+      setUser(res.data);
       setValue("name", res.data.name);
       setValue("email", res.data.email);
       setValue("phone", res.data.phone);
@@ -40,7 +49,6 @@ const UserInformation = () => {
 
   const imageHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const img = e.target.files && e.target.files[0];
-    console.log(e.target.files);
     if (!img) {
       setImagePreview("https://source.unsplash.com/random/300x300?person");
       setImage(null);
@@ -51,8 +59,31 @@ const UserInformation = () => {
   };
 
   const onSubmit = async (values: FieldValues) => {
-    console.log({ values });
-    console.log(image);
+    let imageUrl: {
+      error: number;
+      message: string;
+      data: string | null;
+    } = { error: 1, message: "", data: null };
+
+    if (image) {
+      imageUrl = await uploadImage(session?.data?.user?.id, image);
+    }
+    const data = {
+      ...values,
+      image: !imageUrl.error ? imageUrl.data : null,
+    };
+
+    const res = await updateUser(
+      session?.data?.user?.id,
+      data,
+      session?.data?.accessToken
+    );
+    if (!res.error) {
+      setError("");
+      getData();
+    } else {
+      setError(res.message);
+    }
   };
 
   useEffect(() => {

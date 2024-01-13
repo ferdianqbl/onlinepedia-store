@@ -37,14 +37,8 @@ export async function PUT(
     tokenVerify();
     const { id } = params;
     const { data } = await req.json();
-
-    if (data.image) {
-      const { image } = data;
-      console.log({ image });
-    }
-
     const res = await updateData({ collectionName: "users", id, data });
-    return NextResponse.json({ status: 1, data: res }, { status: 200 });
+    return NextResponse.json({ status: 1, data }, { status: 200 });
   } catch (error: any) {
     if (error instanceof Error)
       return NextResponse.json(

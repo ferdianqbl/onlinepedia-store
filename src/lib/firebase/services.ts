@@ -9,7 +9,12 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { getStorage, ref } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import app from "./init";
 
 const db = getFirestore(app);
@@ -61,7 +66,24 @@ export async function deleteData(collectionName: string, id: string) {
   await deleteDoc(res);
 }
 
-export async function uploadImage(userId: string, filename: string) {
+export async function uploadImage(userId: string, imgFile: File) {
+  if (imgFile.type !== "image/png" && imgFile.type !== "image/jpeg")
+    return {
+      error: 1,
+      message: "File type should be png or jpeg",
+      data: null,
+    };
+  if (imgFile.size > 1048576)
+    return {
+      error: 1,
+      message: "File size should be less than 1MB",
+      data: null,
+    };
+  const filename =
+    "profile." +
+    imgFile.name.split(".").find((e) => e === "png" || e === "jpeg");
   const storageRef = ref(storage, `images/${userId}/${filename}`);
-  // const uploadTask = await
+  const uploadTask = await uploadBytesResumable(storageRef, imgFile);
+  const url = await getDownloadURL(uploadTask.ref);
+  return { error: 0, message: "Upload Image Successfully", data: url };
 }
